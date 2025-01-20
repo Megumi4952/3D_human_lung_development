@@ -1,75 +1,42 @@
 % this script produces the processed networks for the raw de-looped trees
 % it outputs the raw tree and also prunned trees.
-% UPDATES:
-% 06/05/2023: I have included the subroutines to extract Sox9 and Ki67
-% expression for each
+
 clc;  clear all
 % close all;
 
-%% Choose dataset to analyse
-
+% This will return networks raw (without pruning) and pruned at 10um 
 pruning_type = {'raw','prune_10um'};
 generate_networks_with_endnode_levels = 0;
 needs_skeletonization = 0;
 
+% Choose dataset to analyze by lobe by uncommenting ONE 
 % dataset = 'right-upper-middle'
-% dataset = 'Ki67-Sox9'
  dataset = 'left-upper'
 % dataset = 'left-lower'
 % dataset = 'right-lower'
-% dataset = 'left-upper-with-surface'
 
 folder_path = {}; file_names = {}; width_imgs = {}; drs = {}; branch_nodes = {}; sample = {}; ki67_imgs = {}; sox9_imgs = {};
 if ispc
     switch dataset
-        case 'Ki67-Sox9'
-            branches = {'B1and2','B3','B4','B5'};
-
-%            folder_path{end+1} = 'E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\KI67Test\EH4627LU-P8-B1and2ONLY'; 
-             folder_path{end+1} = 'F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Library (ECAD)\Proliferation\10GW28082022L-PCW8\Ki67_4x_B1and2'; 
-            sample{end+1} = '10GW28082022LU-P8-B1and2ONLY';
-            file_names{end+1} = 'proximal_pruned_root.tif';
-            width_imgs{end+1} = 'Tb_corrected.tif';
-            ki67_imgs{end+1} = 'ki67_7um.ome.tif';
-            sox9_imgs{end+1} = 'sox9_7um.ome.tif';
-            drs{end+1} = [7 7 7];
-            branch_nodes{end+1} = [93.742 90.742 129.0;93.742 90.742 129.0;nan nan nan;nan nan nan;nan nan nan];
-
-             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\ki67_networks\','networks_all'];
-%            network_dir = ['E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\KI67Test\','networks_all'];
         case 'left-upper'
             %% Left Lungs\Left Upper Lobes
             branches = {'B1and2','B3','B4','B5'};
-
+                         % Change the folder_path to where you store your files 
                          folder_path{end+1} = 'F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Upper Lobe\proximal_pruning\EH3685LU-P8.9(8.7)';
+                         % Then give your output folder a name (sample ID) 
                          sample{end+1} = 'EH3685-LU-P8.9(P8.7)-FULL';
+                         % The proximal pruned (final) skeleton tif file name: 
                          file_names{end+1} = 'proximal_pruned.tif';
+                         % The thickness map tif file: 
                          width_imgs{end+1} = 'Tb_corrected.tif';
+                         % The voxel sizes used:  
                          drs{end+1} = [7 7 7];
+                         % And the coordinates of B1and2, B3, B4, and B5 
                          branch_nodes{end+1} = [296, 298, 66;296, 298, 66;nan, nan, nan;nan, nan, nan;nan, nan, nan];
-            %
-                         folder_path{end+1} = 'F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Upper Lobe\proximal_pruning\EH3549LU-P8.7(8.3)';
-                         sample{end+1} = 'EH3549-LU-P8.7(8.3)-FULL';
-                         file_names{end+1} = 'proximal_pruned_edit.tif';
-                         width_imgs{end+1} = 'Tb_corrected.tif';
-                         drs{end+1} = [7 7 7];
-                         branch_nodes{end+1} = [251, 325, 247;251, 325, 247;nan, nan, nan;nan, nan, nan;nan, nan, nan];
-            %
+            
+            % Add the directory where you want to store your output 
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Upper Lobe\proximal_pruning\','proximal_pruning_networks'];
-            %network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Figure_Images\EH4451_skel_network\','networks']
-        case 'left-upper-with-surface'
-            %% Left Lungs\Left Upper Lobes
-            branches = {'B1and2','B3','B4','B5'};
-
-            %folder_path{end+1} = 'E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\Left Lungs\Left Upper Lobes\with_surface\EH4256LU-P8.4(8.3)';
-            %sample{end+1} = 'EH4256LU-P8.4(8.3)';
-            %file_names{end+1} = 'EH4256LU_skel_7um_prune35.ome.tif';
-            %width_imgs{end+1} = 'EH4256LU_7um_Tb.tif';
-            %drs{end+1} = [7 7 7];
-            %branch_nodes{end+1} = [152.5,	177.5,	280.0;	129.0,	198.0,	253.0;	155.0,	186.33,	232.33;	201.0,	226.0,	256.0;	221.67,	212.33,	268.67];
-
-            %network_dir = ['E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\Left Lungs\Left Upper Lobes\with_surface\','networks_all'];
-
+       
         case 'left-lower'
             branches = {'B6','B7','B8','B9','B10','Bsharp'};
 
@@ -80,43 +47,32 @@ if ispc
                           drs{end+1} = [4 4 4];
                           branch_nodes{end+1} = [1088.4 224.79 706.0;nan nan nan;1018.7 340.33 675.67;1097.3 236.67 702.67;nan nan nan;nan nan nan;nan nan nan];
 
-                          folder_path{end+1} = 'F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Lower Lobe\proximal_pruning\GW13-LL-P11\B9andB10\deloop5\deloop10\proximal_pruned';
-                          sample{end+1} = 'GW13LL-B9andB10andBsharp';
-                          file_names{end+1} = 'proximal_pruned_root.ome.tif';
-                          width_imgs{end+1} = 'Tb_corrected.tif';
-                          drs{end+1} = [4 4 4];
-                          branch_nodes{end+1} = [1374.7 540.33 702.0;nan nan nan;nan nan nan;nan nan nan;1105.3 475.67 615.33;1067.0 402.0 640.0;1349.0 467.0 550.0];
-
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Lower Lobe\proximal_pruning\','proximal_pruning_networks'];
 
         case 'right-upper-middle'
             branches = {'B1','B2','B3','B4','B5'};
 
-            folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\GW13aRUM\RU\deloop5\deloop10\deloop20';
-            sample{end+1} = 'GW13-RU-P11';
-            file_names{end+1} = 'proximal_pruned_70.tif';
-            width_imgs{end+1} = 'Tb_corrected.tif';
-            drs{end+1} = [4 4 4];
-            branch_nodes{end+1} = [937.33 994.0 608.33;1036.7 1004.3 516.67;967.33 1084.7 566.67;837.0 957.0 497.0;nan nan nan;nan nan nan;];
+                        folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\GW13aRUM\RU\deloop5\deloop10\deloop20';
+                        sample{end+1} = 'GW13-RU-P11';
+                        file_names{end+1} = 'proximal_pruned_70.tif';
+                        width_imgs{end+1} = 'Tb_corrected.tif';
+                        drs{end+1} = [4 4 4];
+                        branch_nodes{end+1} = [937.33 994.0 608.33;1036.7 1004.3 516.67;967.33 1084.7 566.67;837.0 957.0 497.0;nan nan nan;nan nan nan;];
 
-           
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\','proximal_pruning_networks'];
 
         case 'right-lower'
             %% Left Lungs\Left Upper Lobes
             branches = {'B6','B7','B8','B9','B10','Bsharp'};
 
-          
-            folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Lower Lobe\proximal_pruning\13GWa-RL-P11\B9_B10\deloop5\deloop10\deloop20';
-            sample{end+1} = '13GWaRL-B9andB10';
-            file_names{end+1} = 'proximal_pruned_70.tif';
-            width_imgs{end+1} = 'Tb_corrected.tif';
-            drs{end+1} = [4 4 4];
-            branch_nodes{end+1} = [886.0 189.0 651.0;nan nan nan;nan nan nan;nan nan nan;886.0 189.0 651.0;919.67 252.67 696.67;nan nan nan];
+                        folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Lower Lobe\proximal_pruning\13GWa-RL-P11\B9_B10\deloop5\deloop10\deloop20';
+                        sample{end+1} = '13GWaRL-B9andB10';
+                        file_names{end+1} = 'proximal_pruned_70.tif';
+                        width_imgs{end+1} = 'Tb_corrected.tif';
+                        drs{end+1} = [4 4 4];
+                        branch_nodes{end+1} = [886.0 189.0 651.0;nan nan nan;nan nan nan;nan nan nan;886.0 189.0 651.0;919.67 252.67 696.67;nan nan nan];
 
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Right Lower Lobe\proximal_pruning\','proximal_pruning_networks'];
-
-
 
     end
 else
@@ -127,14 +83,6 @@ mkdir(network_dir)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for nfiles = 1:length(folder_path)
-
-    switch dataset
-        case 'Ki67-Sox9'
-            sox9_path = [folder_path{nfiles},'\',sox9_imgs{nfiles}];
-            ki67_path = [folder_path{nfiles},'\',ki67_imgs{nfiles}];
-            im_sox9 = tiffreadVolume(sox9_path);
-            im_ki67 = tiffreadVolume(ki67_path);
-    end
 
     for prunes = 1:length(pruning_type)
 
@@ -182,24 +130,6 @@ for nfiles = 1:length(folder_path)
                 pruning = 50;
             case 'prune_100um'
                 pruning = 100;
-            case 'prune_gen_dep_0.5'
-                perform_generation_dependant_prunning = 1;
-                factor = 0.5;
-            case 'prune_gen_dep_1.0'
-                perform_generation_dependant_prunning = 1;
-                factor = 1;
-            case 'prune_gen_dep_2.0'
-                perform_generation_dependant_prunning = 1;
-                factor = 2;
-            case 'prune_gen_dep_0.1'
-                perform_generation_dependant_prunning = 1;
-                factor = 0.1;
-            case 'prune_gen_dep_0.2'
-                perform_generation_dependant_prunning = 1;
-                factor = 0.2;
-            case 'prune_width_100um'
-                perform_width_dependant_prunning = 1;
-                set_width = 100;
         end
 
         [~,nodes,links] = Skel2Graph3D(B,pruning/dr(1));
@@ -213,36 +143,7 @@ for nfiles = 1:length(folder_path)
         im_size = size(B);
         L = segment_lengths(links,nodes,dr,im_size);
 
-        % to manually add missing links
-
-        switch dataset
-            case 'left-upper'
-                %             switch samp
-                %                 case 'EH4049LU-P9.9'
-                %                     % (885, 286, 265) should connect with (864, 275, 266)
-                %                     poss{1} = [885, 286, 265];
-                %                     poss{2} = [864, 275, 266];
-                %                     connect_nodes = find_closest_node(node_positions_all(:,2:4),poss{1},poss{2},dr(1));
-                %                 otherwise
-                connect_nodes = [];
-                %             end
-            case 'left-lower'
-                switch samp
-                    case '11GW18032022-LL-P9.0'
-                        poss{1} = [281,130,186; 249,120,186; 246,117,186; 228,114,186; 391,201,243];
-                        poss{2} = [279,130,186; 247,119,186; 246,115,184; 225,114,184; 385,204,243];
-                        connect_nodes = find_closest_node(node_positions_all(:,2:4),poss{1},poss{2},dr(1));
-                        %                 case 'EH3549-LL-P8.7(8.3)'
-                        %                     poss{1} = [328,151,144;327,323,229];
-                        %                     poss{2} = [335,151,144;327,320,230];
-                        %                     connect_nodes = find_closest_node(node_positions_all(:,2:4),poss{1},poss{2},dr(1));
-                    otherwise
-                        connect_nodes = [];
-                end
-            otherwise
-                connect_nodes = [];
-        end
-
+        connect_nodes = [];
         source_position = branch_nodes{nfiles}(1,:);
         [edge_list,node_positions,edge_list_all,node_positions_all] = construct_newtork_node(links,nodes,L,im_size,source_position,width_path,dr(1),connect_nodes);
 
@@ -261,13 +162,6 @@ for nfiles = 1:length(folder_path)
 
         edge_list_intermediate = edge_list;
 
-        if perform_generation_dependant_prunning
-            [edge_list,del_endnodes] = generation_dependant_prunning(edge_list,root_nodes,factor);
-        end
-
-        if perform_width_dependant_prunning
-            [edge_list,del_endnodes] = width_dependant_prunning(edge_list,root_nodes,set_width);
-        end
 
         G = graph(edge_list_orig(:,1),edge_list_orig(:,2));
         [bins,binsizes] = conncomp(G);
@@ -358,16 +252,6 @@ for nfiles = 1:length(folder_path)
                 write_edge_list(file_path,sample{nfiles},branches{i-1},edge_list_clean)
                 file_path= [file_dir,'\',branches{i-1},'_clean_node_positions.dat'];
                 switch dataset
-                    case 'Ki67-Sox9'
-                        im_width = tiffreadVolume(width_path);
-                        info = imfinfo(width_path);
-                        if ~isempty(info(1).XResolution)
-                            im_width = im_width.*info(1).XResolution;
-                        end
-                        [avg_sox9_intensity,total_sox9_intensity,npixelssox9] = find_expression(dr(1),im_sox9,edge_list_clean,node_positions_clean,newroot);
-                        [avg_ki67_intensity,total_ki67_intensity,npixelski67,tip_diameter,duct_length] = find_expression(dr(1),im_ki67,edge_list_clean,node_positions_clean,newroot);
-                        node_positions_clean = [node_positions_clean,tip_diameter,duct_length,total_sox9_intensity,npixelssox9,total_ki67_intensity,npixelski67];
-                        write_node_pos_ki67_and_sox9(file_path,sample{nfiles},branches{i-1},node_positions_clean)
                     otherwise
                         write_node_pos(file_path,sample{nfiles},branches{i-1},node_positions_clean)
                 end
@@ -389,283 +273,12 @@ for nfiles = 1:length(folder_path)
 
         end
 
-        %     plot_graph(edge_list,node_positions,root_nodes);
-
-
-
-        %     [N,edges] = histcounts(L,0:10:10^3,'Normalization','PDF');
-        %     X = (edges(2:end)+edges(1:end-1))/2;
-        %
-        %     all_Ns(nfiles,:) = N;
-        %
-        %     length(L)
-        %
-        %     %     all_Ns(all_Ns == 0) = [];
-        %     mn = nanmean(all_Ns,1);
-        %     err = nanstd(all_Ns,[],1);
-        %     erneg = mn - err;
-        %     erneg(erneg<=0) = 10e-8;
-        %
-        %     node_file = [save_fold,'node_positions.mat'];
-        %     edge_file = [save_fold,'edge_list.mat'];
-        %     save(node_file,'node_positions')
-        %     save(edge_file,'edge_list')
-        %
-        %     node_file = [save_fold,'node_positions_all.mat'];
-        %     save(node_file,'node_positions_all')
+        
     end
 
 end
 
-% scatter3(node_positions_all(:,2),node_positions_all(:,3),node_positions_all(:,4),'filled')
 %%
-%     [edge_list_tmp,del_nodes] = find_root(edge_list,root_nodes);
-%
-%     G = graph(edge_list(:,1),edge_list(:,2));
-%     [bins,binsizes] = conncomp(G);
-%
-%     figure;
-%     subplot(2,ceil((length(root_nodes)+1)/2),1)
-%     h = plot(G,'layout','layered','NodeLabel',{},'Marker','none','EdgeColor','k');
-%     layout(h,'layered','sources',root_nodes(1));
-%     highlight(h,root_nodes(1),'Marker','o','MarkerSize',4,'NodeColor','g')
-%     highlight(h,root_nodes(2:end),'Marker','o','MarkerSize',4,'NodeColor','r')
-%     title('Full')
-%     sgtitle(sample{nfiles})
-
-% figure;
-% h = plot_3d_graph(edge_list_clean,node_positions_clean,dr,1);
-% highlight(h,4011,'Marker','o','NodeColor','r','MarkerSize',10);
-%%
-% figure;
-% h = plot_3d_graph(edge_list_intermediate,node_positions,dr,root_nodes(1));
-% highlight(h,del_endnodes,'Marker','o','NodeColor','r','MarkerSize',10);
-%%
-% figure
-% % plot_graph_v2(edge_list,node_positions)
-% % figure;
-% %
-% G = plot_graph(edge_list,node_positions,1);
-% %
-% % cycles = allcycles(G);
-%
-% % PRUNE
-% deg = degree(G);
-% ind1 = find(deg == 1); ind1(ind1 == 1) = [];
-% [r,c] = find(ismember(edge_list(:,1:2),ind1))
-% indshort = find(edge_list(:,3) <= prunning_factor*drs(1))
-% inds = intersect(r,indshort);
-% figure
-% edge_list_pruned = edge_list;
-% edge_list_pruned(inds,:) = [];
-% % plot_graph_v2(edge_list_pruned,node_positions)
-% plot_graph(edge_list_pruned,node_positions,1);
-%
-%
-%
-% edge_file = [save_fold,'edge_list_pruned.mat'];
-% save(edge_file,'edge_list_pruned')
-%
-% figure;
-% subplot(1,2,1)
-% plot_3d_network(edge_list,node_positions)
-% subplot(1,2,2)
-% plot_3d_network(edge_list_pruned,node_positions); title('pruned')
-
-%%
-
-%             rn = root_nodes(i);
-%             bin = bins(rn);
-%
-%             sub_nodes = find(bins == bin);
-%
-%             inds = find(all(ismember(edge_list(:,1:2),sub_nodes),2));
-%             edge_list_sub = edge_list(inds,:);
-%
-%             [edge_list_clean,node_positions_clean,newroot] = clean_edge_list(edge_list_sub,node_positions,rn);
-%             G = graph(edge_list_sub(:,1),edge_list_sub(:,2));
-%             deg = degree(G); deg(1) = [];
-%             if any(deg == 2)
-%                 disp('Removing extra nodes (deg==2)')
-%                 [edge_list_clean,node_positions_clean] = remove_intermediate_nodes(edge_list_clean,node_positions_clean,newroot);
-%             end
-%
-%             [edge_list_sub,node_positions_sub] = construct_newtork_subtree(links,nodes,sub_nodes,rn,size(B),dr(1),width_path);
-
-%%
-switch dataset
-    case 'Ki67-Sox9'
-        G = graph(edge_list_clean(:,1),edge_list_clean(:,2));
-        deg = degree(G);
-        ind1 = find(deg==1);
-        ind3 = find(deg==3);
-
-        widths = [];
-        totsox = [];
-        totki = [];
-        avgsox = [];
-        avgki = [];
-        dlength = [];
-
-        for i =1:length(ind3)
-            [r,c] = find(edge_list_clean(:,1:2) == ind3(i));
-            nodes = edge_list_clean(r,1:2);
-            nodes = horzcat(nodes(:));
-            nodes(nodes == ind3(i)) = [];
-            nodes(nodes == 1) = [];
-            nodes(~ismember(nodes,ind1)) = [];
-
-            check_tip = ismember(nodes,ind1);
-            if numel(nodes) == 2 && all(check_tip == 1)
-
-                if node_positions_clean(nodes(1),5) > node_positions_clean(nodes(1),6)
-                    widths(end+1,:) = [node_positions_clean(nodes(1),5),node_positions_clean(nodes(2),5)];
-                    totsox(end+1,:) = [node_positions_clean(nodes(1),7),node_positions_clean(nodes(2),7)];
-                    totki(end+1,:) = [node_positions_clean(nodes(1),9),node_positions_clean(nodes(2),9)];
-                    avgsox(end+1,:) = [node_positions_clean(nodes(1),7)./node_positions_clean(nodes(1),8),node_positions_clean(nodes(2),7)./node_positions_clean(nodes(2),8)];
-                    avgki(end+1,:) = [node_positions_clean(nodes(1),9)./node_positions_clean(nodes(1),10),node_positions_clean(nodes(2),9)./node_positions_clean(nodes(2),10)];
-                    dlength(end+1,:) = [node_positions_clean(nodes(1),6),node_positions_clean(nodes(2),6)];
-                else
-                    widths(end+1,2:-1:1) = [node_positions_clean(nodes(1),5),node_positions_clean(nodes(2),5)];
-                    totsox(end+1,2:-1:1) = [node_positions_clean(nodes(1),7),node_positions_clean(nodes(2),7)];
-                    totki(end+1,2:-1:1) = [node_positions_clean(nodes(1),9),node_positions_clean(nodes(2),9)];
-                    avgsox(end+1,2:-1:1) = [node_positions_clean(nodes(1),7)./node_positions_clean(nodes(1),8),node_positions_clean(nodes(2),7)./node_positions_clean(nodes(2),8)];
-                    avgki(end+1,2:-1:1) = [node_positions_clean(nodes(1),9)./node_positions_clean(nodes(1),10),node_positions_clean(nodes(2),9)./node_positions_clean(nodes(2),10)];
-                    dlength(end+1,2:-1:1) = [node_positions_clean(nodes(1),6),node_positions_clean(nodes(2),6)];
-                end
-            end
-        end
-        allwidths = node_positions_clean(:,5);
-        alllengths = node_positions_clean(:,6);
-        allsox9 = node_positions_clean(:,7);
-        alllavgSox9 = node_positions_clean(:,7)./node_positions_clean(:,8);
-        alllki = node_positions_clean(:,9);
-        alllavgki = node_positions_clean(:,9)./node_positions_clean(:,10);
-        %[node_positions_clean,tip_diameter,duct_length,total_sox9_intensity,npixelssox9,total_ki67_intensity,npixelski67];
-
-        figure;
-        sgtitle('All tips')
-
-        subplot(2,2,1)
-        scatter(allwidths,alllengths)
-        xlabel('End duct diameter (\mum)'); ylabel('End duct length (\mum)')
-        set(gcf,'color','w'); set(gcf,'color','w');box on
-
-        subplot(2,2,2)
-        scatter(alllki,allsox9)
-        xlabel('Total Ki67 expression (Arb. Units)'); ylabel('Total Sox9 expression (Arb. Units)')
-        set(gcf,'color','w'); set(gcf,'color','w');box on
-
-        subplot(2,2,3)
-        scatter(alllavgki,alllavgSox9)
-        xlabel('Avg Ki67 expression (Arb. Units)'); ylabel('Avg Sox9 expression (Arb. Units)')
-        set(gcf,'color','w'); set(gcf,'color','w');box on
-
-        subplot(2,2,4)
-        scatter(allwidths,allsox9)
-        xlabel('Tip diameter (\mum)'); ylabel('Total Sox9 expression (Arb. Units)')
-        set(gcf,'color','w'); set(gcf,'color','w');box on
-
-
-        figure;
-        sgtitle('Sibling tips')
-        subplot(2,3,1)
-        scatter(widths(:,1),widths(:,2))
-        xlabel('Tip 1 (thicker): Diameter (per pixel)')
-        ylabel('Tip 2: Diameter (per pixel)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-
-        subplot(2,3,2)
-        scatter(totsox(:,1),totsox(:,2))
-        xlabel('Tip 1: Total Sox9 expression (per pixel)')
-        ylabel('Tip 2: Total Sox9 expression (per pixel)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-        subplot(2,3,3)
-        scatter(totki(:,1),totki(:,2))
-        xlabel('Tip 1: Average KI67 expression (per pixel)')
-        ylabel('Tip 2: Average KI67 expression (per pixel)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-
-        subplot(2,3,4)
-        scatter(totsox(:,1)./totsox(:,2),totki(:,1)./totki(:,2))
-        xlabel('Ratio SOX9 expression (Tip1/Tip2)')
-        ylabel('Ratio KI67 expression (Tip1/Tip2)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-        % refline()
-        R = corrcoef(totsox(:,1)./totsox(:,2),totki(:,1)./totki(:,2))
-
-        subplot(2,3,5)
-        scatter(widths(:,1)./widths(:,2),totki(:,1)./totki(:,2))
-        xlabel('Ratio widths (Tip1/Tip2)');
-        ylabel('Ratio KI67 expression (Tip1/Tip2)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-        subplot(2,3,6)
-        scatter(widths(:,1)./widths(:,2),totsox(:,1)./totsox(:,2))
-        xlabel('Ratio widths (Tip1/Tip2)')
-        ylabel('Ratio SOX9 expression (Tip1/Tip2)')
-        set(gcf,'color','w');set(gcf,'color','w');box on
-
-end
-
-
-function [avg_mrkr_intensity,total_mrkr_intensity,npixels,tip_diameter,duct_length] = find_expression(dr,im,edge_list,node_positions,roots)
-G = graph(edge_list(:,1),edge_list(:,2));
-deg = degree(G);
-ind = find(deg==1);
-ind(ismember(ind,roots)) = [];
-% ind = 8101; %artefacto
-% ind = 15762 %real
-pos = node_positions(ind,2:4);
-
-avg_mrkr_intensity = nan([size(node_positions,1),1]);
-total_mrkr_intensity = nan([size(node_positions,1),1]);
-npixels = nan([size(node_positions,1),1]);
-tip_diameter = nan([size(node_positions,1),1]);
-duct_length = nan([size(node_positions,1),1]);
-for ntip = 1:length(ind)
-    %     ind(ntip)
-    [avg_mrkr_intensity(ind(ntip),1),total_mrkr_intensity(ind(ntip),1),npixels(ind(ntip),1),tip_diameter(ind(ntip),1),duct_length(ind(ntip),1)] = avg_intensity(dr,pos(ntip,:),ind(ntip),edge_list,im);
-end
-end
-
-function [avg_mrkr_intensity,total_mrkr_intensity,npixels,tip_diameter,duct_length] = avg_intensity(dr,pos,ntip,edge_list,im)
-[LY,LX,LZ] = size(im);
-% width = im_width(pos(1),pos(2),pos(3));
-[r,c] = find(edge_list(:,1:2) == ntip);
-width = edge_list(r,4)./dr;
-radius = round(width/2*1.2);
-centerX = pos(1);
-centerY = pos(2);
-centerZ = pos(3);
-
-lx = (floor(centerY)-radius-3); lx(lx<1) = 1;
-ux = (ceil(centerY)+radius+3); ux(ux>LX) = LX;
-ly = (floor(centerX)-radius-3); ly(ly<1) = 1;
-uy = (ceil(centerX)+radius+3); uy(uy>LY) = LY;
-lz = (floor(centerZ)-radius-3); lz(lz<1) = 1;
-uz = (ceil(centerZ)+radius+3); uz(uz>LZ) = LZ;
-
-[Y,X,Z] = ndgrid(lx:ux, ly:uy, lz:uz);
-circlePixels = find(round(sqrt((Y-centerY).^2 + (X-centerX).^2 + (Z-centerZ).^2)) == radius);
-% length(circlePixels)
-
-ind = sub2ind(size(im),X(circlePixels),Y(circlePixels),Z(circlePixels));
-
-% [Y(circlePixels),X(circlePixels),Z(circlePixels),double(Im_width(ind)>0)]
-subim = im(ind); subim = subim(subim > 0);
-sumexp = sum(double(subim));
-totpix = numel(subim);
-avg_mrkr_intensity = sumexp/totpix;
-total_mrkr_intensity = sumexp;
-tip_diameter = width*dr;
-duct_length = edge_list(r,3);
-npixels = totpix;
-end
 
 function L = segment_lengths(links,nodes,dr,im_size)
 L = zeros(length(links),1);
