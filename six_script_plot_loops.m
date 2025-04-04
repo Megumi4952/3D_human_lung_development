@@ -19,7 +19,7 @@ file_path = fullfile(folder, file);
 BW_stack = load_tif(file_path);
 
 % Parameters
-dr = 3; % um/pixel
+dr = 7; % um/pixel
 
 % Extract network
 [~, nodes, links] = Skel2Graph3D(BW_stack,0);
@@ -35,7 +35,7 @@ set(gca,'Color','k');
 
 % Use 3D plot to find the node number of the root of the tree, 
 % and plot branching tree
-root_node = 240;
+root_node = 6;
 figure;
 plot_graph(edge_list,node_positions,root_node, folder);
 

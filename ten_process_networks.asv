@@ -10,9 +10,9 @@ generate_networks_with_endnode_levels = 0;
 needs_skeletonization = 0;
 
 % Choose dataset to analyze by lobe by uncommenting ONE 
- dataset = 'right-upper-middle'
+% dataset = 'right-upper-middle'
 % dataset = 'left-upper'
-% dataset = 'left-lower'
+ dataset = 'left-lower'
 % dataset = 'right-lower'
 
 folder_path = {}; file_names = {}; width_imgs = {}; drs = {}; branch_nodes = {}; sample = {}; ki67_imgs = {}; sox9_imgs = {};
@@ -31,7 +31,7 @@ if ispc
                          % The voxel sizes used:  
                          drs{end+1} = [7 7 7];
                          % And the coordinates of B1and2, B3, B4, and B5 
-                         branch_nodes{end+1} = [309.0, 47.0, 297.0;269.0 133.0 243.0;nan nan nan;nan nan nan;nan nan nan];
+                         branch_nodes{end+1} = [269.0 133.0 243.0;269.0 133.0 243.0;nan nan nan;nan nan nan;nan nan nan];
             
             % Add the directory where you want to store your output 
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Upper Lobe\proximal_pruning\','proximal_pruning_networks'];
@@ -39,24 +39,23 @@ if ispc
         case 'left-lower'
             branches = {'FULL','B7','B8','B9','B10','Bsharp'};
             %branches = {'B6','B7','B8','B9','B10','Bsharp'};
-                          folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Left Lower Lobe\proximal_pruning\EH3570-LL-P7.6(7.9)';
-                          sample{end+1} = 'EH3570-LL-P7.6(7.9)-NOT-SPLIT';
-                          file_names{end+1} = 'proximal_pruned_120.tif';
+                          folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Left Lower Lobe\proximal_pruning\EH3669-LL-P5.6(6.3)';
+                          sample{end+1} = 'EH3-LL-P5.6(6.3)-NOT-SPLIT';
+                          file_names{end+1} = 'skeleton.tif';
                           width_imgs{end+1} = 'Tb_corrected.tif';
                           drs{end+1} = [7 7 7];
-                          branch_nodes{end+1} = [113.0, 246.0, 36.0;113.0, 246.0, 36.0;nan nan nan;nan nan nan;nan nan nan;nan nan nan];
+                          branch_nodes{end+1} = [93.0, 75.0, 180.0;93.0, 75.0, 180.0;nan nan nan;nan nan nan;nan nan nan;nan nan nan];
 
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Left Lower Lobe\proximal_pruning\','proximal_pruning_networks'];
 
         case 'right-upper-middle'
-            %branches = {'B1','B2','B3','B4','B5'};
-            branches = {'FULL','B2','B3','B4','B5'};
-                        folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\EH3694RUM-P9.3(9.7)';
-                        sample{end+1} = 'EH3694RUM-P9.3(9.7)-NOT-SPLIT';
-                        file_names{end+1} = 'proximal_pruned_100.tif';
+            branches = {'B1','B2','B3','B4','B5'};
+                        folder_path{end+1} = 'F:\Megumi\DBOX-EQS1 Dropbox\Eqs1 Box03\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\EH3453RUM-P6.3(6.9)';
+                        sample{end+1} = 'EH3453-RUM-P6.3(6.9)-NOT-SPLIT';
+                        file_names{end+1} = 'proximal_pruned_120.tif';
                         width_imgs{end+1} = 'Tb_corrected.tif';
                         drs{end+1} = [7 7 7];
-                        branch_nodes{end+1} = [373.0, 242.0, 123.0;373.0, 242.0, 123.0;nan nan nan;nan nan nan;nan nan nan;nan nan nan;];
+                        branch_nodes{end+1} = [167.3 29.9 99.0;167.3 29.9 99.0;nan nan nan;nan nan nan;nan nan nan;nan nan nan;];
             network_dir = ['F:\Megumi\Dropbox (DBOX-EQS1)\Megumi-Cadisha\Skeleton by Lobe\Right Upper-Middle Lobes\proximal_pruning\','proximal_pruning_networks'];
 
         case 'right-lower'
