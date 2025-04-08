@@ -35,7 +35,7 @@ set(gca,'Color','k');
 
 % Use 3D plot to find the node number of the root of the tree, 
 % and plot branching tree
-root_node = 6;
+root_node = 1;
 figure;
 plot_graph(edge_list,node_positions,root_node, folder);
 
