@@ -1,3 +1,7 @@
+% To test this script, download an unzip the data in ¨Data for testing ten_process_netwok¨, and put the data in the same folder as this script.
+% open the script in Matlab (R2022a or newer) and press RUN .
+% The script produces the edge_list and corresponding node positions list for each lobe in the sample.
+
 clc;  clear all
 % close all;
 
@@ -9,9 +13,9 @@ needs_skeletonization = 0;
 
 % dataset = 'right-upper'
 % dataset = 'left-upper'
-% dataset = 'left-lower'
+dataset = 'left-lower'
 % dataset = 'left-upper-with-surface'
-dataset = 'compare width method min mean max'
+% dataset = 'compare width method min mean max'
 
 folder_path = {}; file_names = {}; width_imgs = {}; drs = {}; branch_nodes = {}; sample = {};
 if ispc
@@ -205,12 +209,12 @@ if ispc
 %             drs{end+1} = [7 7 7];
 %             branch_nodes{end+1} = [113.0, 230.0, 259.0;159.0, 261.0, 232.0;279.0, 283.0, 256.0;291.0, 282.0, 237.0;271.0, 224.0, 165.0;266.0, 260.0, 184.0;243.0, 202.0, 202.0];
 % 
-%             folder_path{end+1} = 'E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\Left Lungs\Left Lower Lobes\EH3669-LL-P5.6(6.3)';
-%             sample{end+1} = 'EH3669-LL-P5.6(6.3)';
-%             file_names{end+1} = 'EH3669LL_skel_7um_prune35.ome.tif';
-%             width_imgs{end+1} = 'EH3669LL_7um_Tb.tif';
-%             drs{end+1} = [7 7 7];
-%             branch_nodes{end+1} = [93	75	180.0;	64.75	70	131.25;	133.33	100.33	70.667;	121.67	59.667	62.667;	95	92	58.0;	67	96	89.0];
+            folder_path{end+1} = '';
+            sample{end+1} = 'EH3669-LL-P5.6(6.3)';
+            file_names{end+1} = 'EH3669LL_skel_7um_prune35.ome.tif';
+            width_imgs{end+1} = 'EH3669LL_7um_Tb.tif';
+            drs{end+1} = [7 7 7];
+            branch_nodes{end+1} = [93	75	180.0;	64.75	70	131.25;	133.33	100.33	70.667;	121.67	59.667	62.667;	95	92	58.0;	67	96	89.0];
 % 
 %             folder_path{end+1} = 'E:\Documents\Ignacio\Megumi\Shared Human Lung Development (data)\Left Lungs\Left Lower Lobes\EH3685-LL-P8.9(8.7)';
 %             sample{end+1} = 'EH3685-LL-P8.9(8.7)';
@@ -291,8 +295,13 @@ for nfiles = 1:length(folder_path)
     tree_info = {};
     num_imgs = [];
     %     file_name = file_names(nfiles).name;
+    if isempty(folder_path{nfiles})
+        full_path = file_names{nfiles};
+        width_path = width_imgs{nfiles};
+    else
     full_path = [folder_path{nfiles},'\',file_names{nfiles}];
     width_path = [folder_path{nfiles},'\',width_imgs{nfiles}];
+    end
     info = imfinfo(full_path);
     % extract images and relevant info
     num_images_tot = length(info);
