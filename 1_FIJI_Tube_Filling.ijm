@@ -11,8 +11,10 @@ run("Median...", "radius=4 stack");
 run("Enhance Contrast...", "saturated=0.35 normalize process_all"); 
 print("Step : 1/17 (Preprocessing)");
 
-
-run("Make Binary", "method=Otsu background=Dark calculate black");
+middleSlice = nSlices/2;
+setSlice(middleSlice);
+run("Make Binary", "method=Triangle background=Dark black");
+//run("Make Binary", "method=Otsu background=Dark calculate black");
 run("Options...", "iterations=1 count=1 black do=Nothing");
 print("Step : 2/17 (Segmentation)"); 
 
@@ -71,8 +73,11 @@ print("");
 print("Step : 12/17 ...Save raw fiji mask as ome.tif format");
 
 selectWindow(new_image);
-run("OME-TIFF...", "save=" + image_dir + "raw-fiji-mask.ome.tif compression=Uncompressed");
-run("Bio-Formats Importer", "open=" + image_dir + image_title +" color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");	
+run("Grays");
+run("OME-TIFF...", "save=[" + image_dir + "raw-fiji-mask.ome.tif] compression=Uncompressed");
+run("Bio-Formats Importer", "open=[" + image_dir + image_title +"] color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");	
+setOption("ScaleConversions", true);
+run("8-bit");
 run("Merge Channels...", "c2=Reslice-sizeOpen c4=[" + image_title + "] create");
 print("Step : 13/17 (Merge mask and raw)");
 
@@ -92,12 +97,12 @@ run("Fill Holes", "stack");
 //run("Invert", "stack");
 print("Step : 15/17 (Binary treatment)");
 
-run("OME-TIFF...", "save=" + image_dir + "corrected-fiji-mask.ome.tif compression=Uncompressed");
+run("OME-TIFF...", "save=[" + image_dir + "corrected-fiji-mask.ome.tif] compression=Uncompressed");
 print("Step : 16/17 (Save corrected fiji mask as ome.tif format)");
 
 print("");
 print("Step : 17/17...Export Stack As OBJ");
-waitForUser("Export Stack As OBJ...");
+waitForUser("Export Stack As Wavefront .OBJ ...");
 
 close("*");
-print("END ! Yeaaah !!");
+print("Done.");
