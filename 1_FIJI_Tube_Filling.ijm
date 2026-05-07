@@ -82,6 +82,7 @@ run("Merge Channels...", "c2=Reslice-sizeOpen c4=[" + image_title + "] create");
 print("Step : 13/17 (Merge mask and raw)");
 
 print("Step : 14/17...Now...Manual correction");
+setTool(19);
 waitForUser("Manual Correction...");
 
 selectImage("Composite");
@@ -102,7 +103,8 @@ print("Step : 16/17 (Save corrected fiji mask as ome.tif format)");
 
 print("");
 print("Step : 17/17...Export Stack As OBJ");
-waitForUser("Export Stack As Wavefront .OBJ ...");
+run("Wavefront .OBJ ...", "stack=" + getTitle() + " save=[" + image_dir + "Mesh.obj]");
+waitForUser("Export Stack As OBJ (Click on OK if it's good)");
 
 close("*");
 print("Done.");
