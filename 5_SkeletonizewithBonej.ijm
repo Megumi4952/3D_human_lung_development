@@ -2,6 +2,8 @@
 
 /*
 Check if those Fiji plugins are installed : 
+clij
+clij2
 clijx-assistant
 clijx-assistant-extensions
 3D ImageJ Suite
@@ -11,7 +13,7 @@ IJPB-Plugins
 
 // Image opening possibilities :
 // Option 1 : With the path of an unique image (replace path by yours)
-//open("F:/Megumi/Dropbox (DBOX-EQS1)/Skeleton by Lobe/Left Upper Lobe/EH3138LU-P9.0(9.7)/Trial 2/4um/EH3138LU_Trial2_4um.tif");
+//open("path/to/image.tif");
 
 // Option 2 : With directory if you have multiple image in a same folder
 /*
@@ -66,8 +68,7 @@ selectImage(raw_image_title);
 Stack.setXUnit("um");
 run("Properties...", "channels=1 slices="+img_slice+" frames=1 pixel_width="+width+" pixel_height="+height+" voxel_depth="+voxel);
 
-run("CLIJ2 Macro Extensions", "cl_device=[Quadro RTX 8000]");
-//run("CLIJ2 Macro Extensions", "cl_device=");
+run("CLIJ2 Macro Extensions", "cl_device=");
 
 
 // bone j skeletonize
@@ -83,7 +84,8 @@ Stack.setXUnit("um");
 run("Properties...", "channels=1 slices="+img_slice+" frames=1 pixel_width="+width+" pixel_height="+height+" voxel_depth="+voxel);
 
 //run("OME-TIFF...", "save=[F:/Megumi/Dropbox (DBOX-EQS1)/Skeleton by Lobe/Left Upper Lobe/EH3138LU-P9.0(9.7)/Trial 2/4um/EH3138LU_Trial2_4um_skel.tif] export compression=Uncompressed");
-run("OME-TIFF...", "save=["+image_dir+"skeleton.tif] export compression=Uncompressed"); 
+run("OME-TIFF...", "save=["+image_dir+"skeleton.tif] export compression=Uncompressed");
+ 
 
 
 
